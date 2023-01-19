@@ -14,17 +14,26 @@ function App() {
   ];
 
   const [selected, setSelected] = useState(0);
+  const [vote, setVotes] = useState(0);
 
   const generateRandomNumbers = () => {
-    return Math.floor(Math.random() * 10) + 1;
+    return Math.floor(Math.random() * 8);
   };
+
+  const handleChangeAnecdote = () => {
+    setSelected(generateRandomNumbers());
+  };
+
+  const handleVoteChange = () => {};
 
   console.log(generateRandomNumbers());
 
   return (
     <div>
       <p>{anecdotes[selected]}</p>
-      <Button label="next anecdote" />
+      <p>had {vote} votes</p>
+      <Button onClick={handleVoteChange} label="vote" />
+      <Button onClick={handleChangeAnecdote} label="next anecdote" />
     </div>
   );
 }
