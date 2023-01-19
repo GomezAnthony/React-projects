@@ -14,7 +14,7 @@ function App() {
   ];
 
   const [selected, setSelected] = useState(0);
-  const [vote, setVotes] = useState(0);
+  const [vote, setVotes] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
 
   const generateRandomNumbers = () => {
     return Math.floor(Math.random() * 8);
@@ -24,16 +24,31 @@ function App() {
     setSelected(generateRandomNumbers());
   };
 
-  const handleVoteChange = () => {};
+  const handleVoteChange = () => {
+    const copy = [...vote];
+    console.log(copy);
+    copy[selected] += 1;
+    setVotes(copy);
 
-  console.log(generateRandomNumbers());
+    // I cant modify the varaible directly. It needs to be changes through a state.
+    // vote[selected] += 1;
+    // setVotes(vote);
+  };
+
+  const displayLargestVotes = () => {
+    return Math.max(...vote);
+  };
+
+  console.log(displayLargestVotes() + ' Hello');
 
   return (
     <div>
       <p>{anecdotes[selected]}</p>
-      <p>had {vote} votes</p>
+      <p>had {vote[selected]} votes</p>
       <Button onClick={handleVoteChange} label="vote" />
       <Button onClick={handleChangeAnecdote} label="next anecdote" />
+      <h1>Anecdotes with most votes</h1>
+      <p>{anecdotes[vote[selected]]}</p>
     </div>
   );
 }
