@@ -35,11 +35,8 @@ function App() {
     // setVotes(vote);
   };
 
-  const displayLargestVotes = () => {
-    return Math.max(...vote);
-  };
-
-  console.log(displayLargestVotes() + ' Hello');
+  // Finds the index of the heightest value
+  const top = () => vote.indexOf(Math.max(...vote));
 
   return (
     <div>
@@ -48,7 +45,8 @@ function App() {
       <Button onClick={handleVoteChange} label="vote" />
       <Button onClick={handleChangeAnecdote} label="next anecdote" />
       <h1>Anecdotes with most votes</h1>
-      <p>{anecdotes[vote[selected]]}</p>
+      <p>{anecdotes[top()]}</p>
+      <p>{vote[top()]}</p>
     </div>
   );
 }
