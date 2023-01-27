@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PersonForm from './components/PersonForm';
+import Persons from './components/Persons';
 
 function App() {
   const [person, setPersons] = useState([
@@ -17,7 +19,7 @@ function App() {
       alert(`${newName} is already in the phonebook`);
       setNewName('');
     } else {
-      setPersons([...person, { name: newName, phone: newNumber }]);
+      setPersons([...person, { name: newName, number: newNumber }]);
       setNewNumber('');
       setNewName('');
     }
@@ -48,24 +50,15 @@ function App() {
       <p>
         filter shown with <input onChange={handleFilterChange} value={filter} />
       </p>
-      <form onSubmit={addNewPerson}>
-        <div>
-          name: <input onChange={handlePersonChange} value={newName} />
-        </div>
-        <div>
-          {' '}
-          number: <input onChange={handlePhoneChange} value={newNumber} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm
+        onSubmit={addNewPerson}
+        newName={newName}
+        newPersonChange={handlePersonChange}
+        newPhone={newNumber}
+        newNumberChange={handlePhoneChange}
+      />
       <h2>Numbers</h2>
-      {filterPhoneBook.map((persons) => (
-        <p key={persons.name}>
-          {persons.name} {persons.number}
-        </p>
-      ))}
+      <Persons persons={filterPhoneBook} />
     </div>
   );
 }
