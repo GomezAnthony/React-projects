@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
-import axios from 'axios';
+import personServices from './services/persons';
 
 function App() {
   const [person, setPersons] = useState([]);
@@ -11,27 +11,46 @@ function App() {
 
   useEffect(() => {
     console.log('effect');
-    axios.get('http://localhost:3001/persons').then((response) => {
-      console.log('promise filled');
-      console.log(response.data);
-      setPersons(response.data);
+    personServices.getAll().then((initialPersons) => {
+      setPersons(initialPersons);
     });
   }, []);
 
   const addNewPerson = (event) => {
     event.preventDefault();
+    const personObj = {
+      name: newName,
+      number: newNumber,
+    };
+
     if (person.find((person) => person.name === newName)) {
       alert(`${newName} is already in the phonebook`);
       setNewName('');
     } else {
-      setPersons([...person, { name: newName, number: newNumber }]);
+      personServices.create(personObj).then((returnPerson) => {
+        setPersons([...person, returnPerson]);
+      });
       setNewNumber('');
       setNewName('');
     }
   };
 
+  const removePerson = (id) => {
+    if (window.confirm('Do you really want to delete this person')) {
+      personServices
+        .remove(id)
+        .then(() => {
+          alert(`Deleted ${person.find((per) => per.id === id).name}`);
+          setPersons(person.filter((per) => per.id !== id));
+        })
+        .catch((err) => console.log(err));
+    } else {
+      return;
+    }
+  };
+
   const filterPhoneBook =
-    person === ''
+    filter === ''
       ? person
       : person.filter((persons) =>
           persons.name.toLowerCase().includes(filter.toLowerCase())
@@ -63,7 +82,7 @@ function App() {
         newNumberChange={handlePhoneChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={filterPhoneBook} />
+      <Persons persons={filterPhoneBook} remPer={removePerson} />
     </div>
   );
 }
