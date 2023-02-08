@@ -2,7 +2,7 @@
   "persons": [
     {
       "name": "Arto Hellas",
-      "number": "040-123456",
+      "number": "12989898",
       "id": 1
     },
     {
@@ -19,11 +19,6 @@
       "name": "Mary Poppeick",
       "number": "987-344555",
       "id": 4
-    },
-    {
-      "name": "poop test",
-      "number": "1234",
-      "id": 6
     }
   ]
 }

@@ -4,7 +4,7 @@ import Persons from './components/Persons';
 import personServices from './services/persons';
 
 function App() {
-  const [person, setPersons] = useState([]);
+  const [persons, setPersons] = useState([]);
   const [newNumber, setNewNumber] = useState('');
   const [newName, setNewName] = useState('');
   const [filter, setFilter] = useState('');
@@ -23,12 +23,30 @@ function App() {
       number: newNumber,
     };
 
-    if (person.find((person) => person.name === newName)) {
-      alert(`${newName} is already in the phonebook`);
-      setNewName('');
+    const existingPerson = persons.find((person) => person.name === newName);
+    if (existingPerson) {
+      const confirmation = window.confirm(
+        `${newName} is already in the phonebook, replace the old number with a new one?`
+      );
+
+      if (confirmation) {
+        personServices
+          .update(existingPerson.id, { ...existingPerson, number: newNumber })
+          .then((returnedPerson) => {
+            setPersons(
+              persons.map((personItem) =>
+                personItem.id !== existingPerson.id
+                  ? personItem
+                  : returnedPerson
+              )
+            );
+          });
+
+        console.log('perons new number', newNumber);
+      }
     } else {
-      personServices.create(personObj).then((returnPerson) => {
-        setPersons([...person, returnPerson]);
+      personServices.create(personObj).then((returnedPerson) => {
+        setPersons([...persons, returnedPerson]);
       });
       setNewNumber('');
       setNewName('');
@@ -40,8 +58,8 @@ function App() {
       personServices
         .remove(id)
         .then(() => {
-          alert(`Deleted ${person.find((per) => per.id === id).name}`);
-          setPersons(person.filter((per) => per.id !== id));
+          alert(`Deleted ${persons.find((per) => per.id === id).name}`);
+          setPersons(persons.filter((per) => per.id !== id));
         })
         .catch((err) => console.log(err));
     } else {
@@ -51,8 +69,8 @@ function App() {
 
   const filterPhoneBook =
     filter === ''
-      ? person
-      : person.filter((persons) =>
+      ? persons
+      : persons.filter((persons) =>
           persons.name.toLowerCase().includes(filter.toLowerCase())
         );
 
