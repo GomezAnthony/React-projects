@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import personServices from './services/persons';
+import Notification from './components/Notification';
 
 function App() {
   const [persons, setPersons] = useState([]);
   const [newNumber, setNewNumber] = useState('');
   const [newName, setNewName] = useState('');
   const [filter, setFilter] = useState('');
+  const [showMessage, setShowMessage] = useState();
 
   useEffect(() => {
     console.log('effect');
@@ -42,9 +44,13 @@ function App() {
             );
           });
 
-        console.log('perons new number', newNumber);
+        console.log(' new number', newNumber);
       }
     } else {
+      setShowMessage(`Added ${newName}`);
+      setTimeout(() => {
+        setShowMessage(null);
+      }, 5000);
       personServices.create(personObj).then((returnedPerson) => {
         setPersons([...persons, returnedPerson]);
       });
@@ -61,7 +67,14 @@ function App() {
           alert(`Deleted ${persons.find((per) => per.id === id).name}`);
           setPersons(persons.filter((per) => per.id !== id));
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setShowMessage(
+            `Information on ${newName} is already deleted from the server`
+          );
+          setTimeout(() => {
+            setShowMessage(null);
+          }, 5000);
+        });
     } else {
       return;
     }
@@ -89,6 +102,7 @@ function App() {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={showMessage} />
       <p>
         filter shown with <input onChange={handleFilterChange} value={filter} />
       </p>
