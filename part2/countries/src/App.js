@@ -28,14 +28,21 @@ const App = () => {
       : countries.filter((data) =>
           data.name.common.toLowerCase().includes(filtered.toLowerCase())
         );
+
   return (
     <div>
       <p>
         Search for countries: <input onChange={handleChange} value={filtered} />
       </p>
-      {filteredData.map((count) => (
-        <li key={count.id}>{count.name.common}</li>
-      ))}
+      {filteredData.length > 10
+        ? 'Too many matches, specify another filter'
+        : filteredData.length == 1
+        ? filteredData.map((count) => (
+            <li key={count.id}>{count.name.common}</li>
+          ))
+        : filteredData.map((count) => (
+            <li key={count.id}>{count.name.common}</li>
+          ))}
     </div>
   );
 };
