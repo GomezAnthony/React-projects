@@ -34,11 +34,20 @@ const App = () => {
       <p>
         Search for countries: <input onChange={handleChange} value={filtered} />
       </p>
+
       {filteredData.length > 10
         ? 'Too many matches, specify another filter'
-        : filteredData.length == 1
+        : // Display name, capital, area, Languages, Flag
+        filteredData.length === 1
         ? filteredData.map((count) => (
-            <li key={count.id}>{count.name.common}</li>
+            <>
+              <h1 key={count.id}>{count.name.common}</h1>
+              <p key={count.id}>Capital: {count.capital}</p>
+              <p key={count.id}>Area: {count.area}</p>
+              <h4 key={count.id}>Languages:</h4>{' '}
+              <li> {Object.values(count.languages).join(', ')}</li>
+              <h1>{count.flag}</h1>
+            </>
           ))
         : filteredData.map((count) => (
             <li key={count.id}>{count.name.common}</li>
