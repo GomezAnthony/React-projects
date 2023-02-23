@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './App.css';
+
+const Button = ({ label, onClick }) => {
+  return (
+    <>
+      <button onClick={onClick}>{label}</button>
+    </>
+  );
+};
 
 const App = () => {
   // Create a hook to handle state change based on the input
@@ -28,6 +37,9 @@ const App = () => {
       : countries.filter((data) =>
           data.name.common.toLowerCase().includes(filtered.toLowerCase())
         );
+  const openCountryClick = () => {
+    console.log('Hello World');
+  };
 
   return (
     <div>
@@ -41,7 +53,7 @@ const App = () => {
         filteredData.length === 1
         ? filteredData.map((count) => (
             <>
-              <h1 key={count.id}>{count.name.common}</h1>
+              <h3 key={count.id}>{count.name.common}</h3>
               <p key={count.id}>Capital: {count.capital}</p>
               <p key={count.id}>Area: {count.area}</p>
               <h4 key={count.id}>Languages:</h4>{' '}
@@ -50,7 +62,10 @@ const App = () => {
             </>
           ))
         : filteredData.map((count) => (
-            <li key={count.id}>{count.name.common}</li>
+            <li key={count.common}>
+              {count.name.common}{' '}
+              <Button onClick={() => console.log('Hello')} label="Show" />
+            </li>
           ))}
     </div>
   );
