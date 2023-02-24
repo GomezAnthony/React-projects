@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
-
-const Button = ({ label, onClick }) => {
-  return (
-    <>
-      <button onClick={onClick}>{label}</button>
-    </>
-  );
-};
+import Button from './components/Button';
 
 const App = () => {
   // Create a hook to handle state change based on the input
@@ -28,6 +21,10 @@ const App = () => {
     setFiltred(e.target.value);
   };
 
+  const openCountryClick = () => {
+    alert(filtered);
+  };
+
   // If the nothing is being inputed by the user, than display the whole list of countries.
   // If something is being typed into the input, filter the data based on the name inside the
   // country data set, with the input query and display the correct result.
@@ -37,19 +34,16 @@ const App = () => {
       : countries.filter((data) =>
           data.name.common.toLowerCase().includes(filtered.toLowerCase())
         );
-  const openCountryClick = () => {
-    console.log('Hello World');
-  };
 
   return (
     <div>
       <p>
         Search for countries: <input onChange={handleChange} value={filtered} />
       </p>
-
       {filteredData.length > 10
         ? 'Too many matches, specify another filter'
         : // Display name, capital, area, Languages, Flag
+        // If the countries are less than 10, used the buttons to display the countries. Show and unshow
         filteredData.length === 1
         ? filteredData.map((count) => (
             <>
@@ -62,9 +56,9 @@ const App = () => {
             </>
           ))
         : filteredData.map((count) => (
-            <li key={count.common}>
+            <li key={count.id}>
               {count.name.common}{' '}
-              <Button onClick={() => console.log('Hello')} label="Show" />
+              <Button onClick={openCountryClick} label="Show" />
             </li>
           ))}
     </div>
