@@ -7,6 +7,7 @@ const App = () => {
   // Create a hook to handle state change based on the input
   const [countries, setCountries] = useState([]);
   const [filtered, setFiltred] = useState('');
+  const [openCountry, setOpenCountry] = useState(false);
 
   useEffect(() => {
     axios.get('https://restcountries.com/v3.1/all').then((response) => {
@@ -22,7 +23,7 @@ const App = () => {
   };
 
   const openCountryClick = () => {
-    alert(filtered);
+    setOpenCountry(!openCountry);
   };
 
   // If the nothing is being inputed by the user, than display the whole list of countries.
@@ -42,9 +43,7 @@ const App = () => {
       </p>
       {filteredData.length > 10
         ? 'Too many matches, specify another filter'
-        : // Display name, capital, area, Languages, Flag
-        // If the countries are less than 10, used the buttons to display the countries. Show and unshow
-        filteredData.length === 1
+        : filteredData.length === 1
         ? filteredData.map((count) => (
             <>
               <h3 key={count.id}>{count.name.common}</h3>
@@ -57,8 +56,21 @@ const App = () => {
           ))
         : filteredData.map((count) => (
             <li key={count.id}>
-              {count.name.common}{' '}
-              <Button onClick={openCountryClick} label="Show" />
+              {openCountry ? (
+                <>
+                  <h3 key={count.id}>{count.name.common}</h3>
+                  <p key={count.id}>Capital: {count.capital}</p>
+                  <p key={count.id}>Area: {count.area}</p>
+                  <h4 key={count.id}>Languages:</h4>{' '}
+                  <li> {Object.values(count.languages).join(', ')}</li>
+                  <h1>{count.flag}</h1>
+                </>
+              ) : (
+                <Button
+                  onClick={openCountryClick}
+                  label={openCountry ? 'show' : 'close'}
+                />
+              )}
             </li>
           ))}
     </div>
